@@ -1,27 +1,21 @@
-require('dotenv').config();  // Load environment variables
-const mysql = require('mysql');
+const connectDb = require('./db'); // Import the function
 
-// Establish connection with MySQL database
-const connectDb = () => {
-    return new Promise((resolve, reject) => {
-        const db = mysql.createConnection({
-            host: process.env.HOST,
-            user: process.env.USER,     // Fixed environment variable
-            password: process.env.PASSWORD, // Fixed environment variable
-            database: process.env.DBNAME
-        });
+(async () => {
+    try {
+        const db = await connectDb();
 
-        // Connect the database
-        db.connect((err) => {
+        // Example query
+        db.query('SELECT 1', (err, result) => {
             if (err) {
-                console.error(`Failed to connect to MySQL database!`, err);
-                reject(err);
+                console.error('Error running query:', err);
             } else {
-                console.log(`Blood-Bank-System successfully connected to MySQL server`.bgGreen.white);
-                resolve(db);
+                console.log('Query result:', result);
             }
         });
-    });
-};
 
-module.exports = connectDb;
+        // Close connection when done
+        db.end();
+    } catch (error) {
+        console.error('Database connection failed:', error);
+    }
+})();
