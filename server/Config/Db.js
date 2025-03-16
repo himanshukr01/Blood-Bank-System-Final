@@ -1,37 +1,27 @@
-const { bgGreen } = require('colors');
+require('dotenv').config();  // Load environment variables
 const mysql = require('mysql');
 
-//Establish connection with mysql database..
-const connectDb = async () => {
-    try {
+// Establish connection with MySQL database
+const connectDb = () => {
+    return new Promise((resolve, reject) => {
         const db = mysql.createConnection({
             host: process.env.HOST,
-            user: process.env.USER,
-            password: process.env.PASSWORD,
+            user: process.env.USER,     // Fixed environment variable
+            password: process.env.PASSWORD, // Fixed environment variable
             database: process.env.DBNAME
         });
 
-        //Connect the database..
+        // Connect the database
         db.connect((err) => {
             if (err) {
-                console.log(err);
-                
-                console.log(`Failed to connect to mysql database..!!!`.bgRed.white);
-                return;
+                console.error(`Failed to connect to MySQL database!`, err);
+                reject(err);
             } else {
-                console.log(`Blood-Bank-System successfully connected to MYSQL server`.bgGreen.white);
+                console.log(`Blood-Bank-System successfully connected to MySQL server`.bgGreen.white);
+                resolve(db);
             }
         });
-
-        // Store the database connection for further use
-        return db;
-
-        // //Close the connection after work done..
-        // db.end();
-
-    } catch (err) {
-        console.log(err);
-    }
-}
+    });
+};
 
 module.exports = connectDb;
