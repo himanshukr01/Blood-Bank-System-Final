@@ -1,21 +1,18 @@
-const connectDb = require('./db'); // Import the function
+const mysql = require('mysql2');
 
-(async () => {
-    try {
-        const db = await connectDb();
+const connection = mysql.createConnection({
+    host: '127.0.0.1',  // or 'localhost'
+    user: 'root',       // Change if you use a different username
+    password: 'himanshu@123',       // Add your MySQL Workbench password
+    database: 'testdb' // Replace with your actual database name
+});
 
-        // Example query
-        db.query('SELECT 1', (err, result) => {
-            if (err) {
-                console.error('Error running query:', err);
-            } else {
-                console.log('Query result:', result);
-            }
-        });
-
-        // Close connection when done
-        db.end();
-    } catch (error) {
-        console.error('Database connection failed:', error);
+connection.connect((err) => {
+    if (err) {
+        console.error('Database connection failed:', err.stack);
+        return;
     }
-})();
+    console.log('Connected to MySQL Workbench database');
+});
+
+module.exports = connection;
