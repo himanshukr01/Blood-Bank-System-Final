@@ -3,6 +3,9 @@ import React, { createContext, useState } from "react";
 
 const DonorContext = createContext();
 
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
+
 export const DonorProvider = ({ children }) => {
   const [donorData, setDonorData] = useState({});
   const [loading, setLoading] = useState(false);
@@ -13,16 +16,14 @@ export const DonorProvider = ({ children }) => {
     setError(null);
 
     try {
-      const response = await axios.post(
-        process.env.REACT_APP_BACKEND + "/api/donor/donor-register",
-        {
-          email: registrationData.email,
-          password: registrationData.password,
-          first_name: registrationData.first_name,
-          last_name: registrationData.last_name,
-          contact: registrationData.contact,
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/donor/donor-register`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(donorData),
+    });
+    
 
       console.log("Response data:", response.data);
 
