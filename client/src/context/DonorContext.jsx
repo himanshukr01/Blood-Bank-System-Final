@@ -3,8 +3,7 @@ import React, { createContext, useState } from "react";
 
 const DonorContext = createContext();
 
-const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
-
+const BASE_URL = process.env.REACT_APP_BACKEND || "http://localhost:5000";
 
 export const DonorProvider = ({ children }) => {
   const [donorData, setDonorData] = useState({});
@@ -16,66 +15,15 @@ export const DonorProvider = ({ children }) => {
     setError(null);
 
     try {
-      const response = await fetch(`${BASE_URL}/api/donor/donor-register`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(donorData),
-    });
-    
-
+      const response = await axios.post(`${BASE_URL}/api/donor/donor-register`, registrationData);
       console.log("Response data:", response.data);
-
-      // Directly set the donor data from the response
       setDonorData(response.data);
     } catch (err) {
-      // Check if the error response exists and set the error message
-      if (err.response) {
-        console.error("Error response data:", err.response.data);
-        setError(
-          err.response.data.error || "An error occurred during registration."
-        );
-      } else {
-        setError("Network error or unexpected error occurred.");
-      }
+      console.error("Error response data:", err.response?.data || err.message);
+      setError(err.response?.data?.error || "An error occurred during registration.");
     } finally {
       setLoading(false);
     }
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await axios.post(
-        process.env.REACT_APP_BACKEND + "/api/donor/donor-register",
-        {
-          email: registrationData.email,
-          password: registrationData.password,
-          first_name: registrationData.first_name,
-          last_name: registrationData.last_name,
-          contact: registrationData.contact,
-        }
-      );
-
-      console.log("Response data:", response.data);
-
-      // Directly set the donor data from the response
-      setDonorData(response.data);
-    } catch (err) {
-      // Check if the error response exists and set the error message
-      if (err.response) {
-        console.error("Error response data:", err.response.data);
-        setError(
-          err.response.data.error || "An error occurred during registration."
-        );
-      } else {
-        setError("Network error or unexpected error occurred.");
-      }
-    } finally {
-      setLoading(false);
-    }
-
-    console.log("Message" + error);
   };
 
   const loginDonor = async (loginData) => {
@@ -83,26 +31,11 @@ export const DonorProvider = ({ children }) => {
     setError(null);
 
     try {
-      const response = await axios.post(
-        process.env.REACT_APP_BACKEND + "/api/donor/donor-login",
-        {
-          email: loginData.email,
-          password: loginData.password,
-        }
-      );
-
-      // console.log("Response data:", response.data);
-
-      // Directly set the donor data from the response
+      const response = await axios.post(`${BASE_URL}/api/donor/donor-login`, loginData);
       setDonorData(response.data);
     } catch (err) {
-      // Check if the error response exists and set the error message
-      if (err.response) {
-        console.error("Error response data:", err.response.data);
-        setError(err.response.data.error || "An error occurred during Login.");
-      } else {
-        setError("Network error or unexpected error occurred.");
-      }
+      console.error("Error response data:", err.response?.data || err.message);
+      setError(err.response?.data?.error || "An error occurred during login.");
     } finally {
       setLoading(false);
     }
@@ -113,58 +46,26 @@ export const DonorProvider = ({ children }) => {
     setError(null);
 
     try {
-      const response = await axios.put(
-        process.env.REACT_APP_BACKEND + `/api/donor/donor-update-profile/${id}`,
-        {
-          email: data.email,
-          password: data.password,
-          first_name: data.first_name,
-          last_name: data.last_name,
-          contact: data.contact,
-          blood_group: data.blood_group,
-          age: data.age,
-          health_status: data.health_status,
-        }
-      );
-
+      const response = await axios.put(`${BASE_URL}/api/donor/donor-update-profile/${id}`, data);
       setDonorData(response.data);
     } catch (err) {
-      // Check if the error response exists and set the error message
-      if (err.response) {
-        console.error("Error response data:", err.response.data);
-        setError(err.response.data.error || "An error occurred during Login.");
-      } else {
-        setError("Network error or unexpected error occurred.");
-      }
+      console.error("Error response data:", err.response?.data || err.message);
+      setError(err.response?.data?.error || "An error occurred while updating.");
     } finally {
       setLoading(false);
     }
   };
+
   const makeDonation = async (data) => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await axios.post(
-        process.env.REACT_APP_BACKEND + `/api/donor/donor-makeDonation`,
-        {
-          donor_id: data.id,
-          donor_name: data.name,
-          blood_type: data.bloodGroup,
-          quantity_ml: data.quantity,
-          donation_date: data.donationDate,
-        }
-      );
-
+      const response = await axios.post(`${BASE_URL}/api/donor/donor-makeDonation`, data);
       setDonorData(response.data);
     } catch (err) {
-      // Check if the error response exists and set the error message
-      if (err.response) {
-        console.error("Error response data:", err.response.data);
-        setError(err.response.data.error || "An error occurred during Login.");
-      } else {
-        setError("Network error or unexpected error occurred.");
-      }
+      console.error("Error response data:", err.response?.data || err.message);
+      setError(err.response?.data?.error || "An error occurred during donation.");
     } finally {
       setLoading(false);
     }
