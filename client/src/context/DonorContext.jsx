@@ -3,7 +3,7 @@ import React, { createContext, useState } from "react";
 
 const DonorContext = createContext();
 
-const BASE_URL = process.env.REACT_APP_BACKEND || "http://localhost:5000";
+const BASE_URL = process.env.REACT_APP_BACKEND || "http://localhost:3000";
 
 export const DonorProvider = ({ children }) => {
   const [donorData, setDonorData] = useState({});
