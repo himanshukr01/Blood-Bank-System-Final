@@ -6,9 +6,9 @@ const DonorContext = createContext();
 const BASE_URL = process.env.REACT_APP_BACKEND || "http://localhost:3000";
 
 export const DonorProvider = ({ children }) => {
-  // const [donorData, setDonorData] = useState({});
-  // const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState(null);
+  const [donorData, setDonorData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const registerDonor = async (registrationData) => {
     setLoading(true);
