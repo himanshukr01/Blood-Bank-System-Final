@@ -8,7 +8,7 @@ const connectDB = require("./Config/Db");
 const Donor = require("./Routes/Donor");
 const Donne = require("./Routes/Donne");
 const BloodManager = require("./Routes/BloodManager");
-const connectDb = require('../Config/Db');
+const connectDb = require('./Config/Db');
 
 connectDb();
 
