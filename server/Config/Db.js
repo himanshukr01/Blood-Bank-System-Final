@@ -1,18 +1,17 @@
-const mysql = require('mysql2');
+const mongoose = require('mongoose');
 
-const connection = mysql.createConnection({
-    host: '127.0.0.1',  // or 'localhost'
-    user: 'root',       // Change if you use a different username
-    password: 'himanshu@123',       // Add your MySQL Workbench password
-    database: 'testdb' // Replace with your actual database name
-});
+const connectToDB = () => {
+  mongoose
+    .connect('mongodb+srv://himanshukr1505892:6cnCTRXkuMAKHlTu@cluster0.imnoc.mongodb.net/', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+    .then(() => {
+      console.log('Connected to MongoDB Atlas');
+    })
+    .catch((err) => {
+      throw new Error(`Could not connect to MongoDB: ${err}`);
+    });
+};
 
-connection.connect((err) => {
-    if (err) {
-        console.error('Database connection failed:', err.stack);
-        return;
-    }
-    console.log('Connected to MySQL Workbench database');
-});
-
-module.exports = connection;
+module.exports = connectToDB;
